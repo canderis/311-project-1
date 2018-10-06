@@ -5,8 +5,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 public class WikiCrawler {
 
@@ -27,8 +25,7 @@ public class WikiCrawler {
     public ArrayList<String> extractLinks(String document) {
         ArrayList<String> links = new ArrayList<>();
 
-        int i;
-        for (i = 0; i < document.length() - 2; i++) {
+        for (int i = 0; i < document.length() - 2; i++) {
             boolean firstParagraphTag = document.substring(i, i + 3).equals("<p>");
             if (firstParagraphTag) {
                 document = document.substring(i);
@@ -36,11 +33,27 @@ public class WikiCrawler {
             }
         }
 
-        Pattern p = Pattern.compile("\\/wiki\\/[^#:]+?(?=\")");
-        Matcher m = p.matcher(document);
-
-        while (m.find()) {
-            links.add(m.group());
+        int i = 0;
+        while (i < document.length() - 6) {
+            String sequence = document.substring(i, i + 7);
+            boolean isLinkSequence = sequence.equals("\"/wiki/");
+            if (isLinkSequence) {
+                i += 6;
+                char currentCharacter = document.charAt(++i);
+                String link = sequence.substring(1) + currentCharacter;
+                currentCharacter = document.charAt(++i);
+                boolean hasSpecialCharacter = false;
+                while (currentCharacter != '"') {
+                    hasSpecialCharacter = currentCharacter == '#' || currentCharacter == ':';
+                    if (hasSpecialCharacter) break;
+                    link += currentCharacter;
+                    currentCharacter = document.charAt(++i);
+                }
+                if (!hasSpecialCharacter && !links.contains(link)) {
+                    links.add(link);
+                }
+            }
+            i++;
         }
 
         return links;

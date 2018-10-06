@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class WikiCrawlerTest {
 
     @Test
-    public void extractLinksTest() {
+    public void extractLinksTest1() {
         String seed = "/wiki/Stubb_Place";
         int max = 10;
         String[] topics = {"ball", "gravity"};
@@ -21,15 +21,31 @@ public class WikiCrawlerTest {
                 "/wiki/Cumbria",
                 "/wiki/Lake_District",
                 "/wiki/National_parks_of_England_and_Wales",
-                "/wiki/Cumbria",
                 "/wiki/Stubb_Place",
-                "/wiki/Stubb_Place",
-                "/wiki/Main_Page",
-                "/wiki/Main_Page",
-                "/wiki/Terms_of_Use",
-                "/wiki/Privacy_policy",
-                "/wiki/Privacy_policy",
-                "/wiki/Cookie_statement"
+                "/wiki/Main_Page"
+        );
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void extractLinksTest2() {
+        String seed = "/wiki/Chomphu,_Lampang";
+        int max = 10;
+        String[] topics = {"place"};
+        String output = "web_graph.txt";
+
+        WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
+
+        List<String> actual = wc.extractLinks(wc.getDocument(wc.getSeed()));
+        List<String> expected = Arrays.asList(
+                "/wiki/Thai_language",
+                "/wiki/Tambon",
+                "/wiki/Mueang_Lampang_District",
+                "/wiki/Lampang_Province",
+                "/wiki/Thailand",
+                "/wiki/Chomphu,_Lampang",
+                "/wiki/Main_Page"
         );
 
         assertEquals(expected, actual);
