@@ -62,10 +62,9 @@ public class WikiCrawler {
     }
 
     public void crawl(boolean focused) {
-        if(focused){
+        if (focused) {
             this.focusedCrawl();
-        }
-        else{
+        } else {
             this.notFocusedCrawl();
         }
     }
@@ -89,8 +88,12 @@ public class WikiCrawler {
     public String getDocument(String pageUrl) {
         URL url;
         this.crawlCounter++;
-        if(this.crawlCounter%20==0){
-            //sleep
+        if (this.crawlCounter % 20 == 0) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         try {
@@ -116,5 +119,13 @@ public class WikiCrawler {
             e.printStackTrace();
             return "An error occurred";
         }
+    }
+
+    private void focusedCrawl() {
+        // do focused crawl
+    }
+
+    private void notFocusedCrawl() {
+        // do unfocused crawl
     }
 }
