@@ -16,7 +16,7 @@ public class WikiCrawlerTest {
 
         WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
 
-        List<String> actual = wc.extractLinks(wc.getDocument(wc.getSeed()));
+        List<String> actual = wc.extractLinks2(wc.getDocument(wc.getSeed()));
         List<String> expected = Arrays.asList(
                 "/wiki/Cumbria",
                 "/wiki/Lake_District",
@@ -37,7 +37,7 @@ public class WikiCrawlerTest {
 
         WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
 
-        List<String> actual = wc.extractLinks(wc.getDocument(wc.getSeed()));
+        List<String> actual = wc.extractLinks2(wc.getDocument(wc.getSeed()));
         List<String> expected = Arrays.asList(
                 "/wiki/Thai_language",
                 "/wiki/Tambon",

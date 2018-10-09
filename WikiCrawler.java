@@ -29,6 +29,53 @@ public class WikiCrawler {
         this.topics = topics;
         this.output = output;
     }
+    
+    public ArrayList<String> extractLinks2(String document) {
+        ArrayList<String> links = new ArrayList<>();
+
+        int firstP = 0;
+        while(firstP < document.length() - 3) {
+        	if(document.charAt(firstP) == '<') {
+        		firstP++;
+        		if(document.charAt(firstP) == 'p') {
+        			firstP++;
+        			if(document.charAt(firstP) == '>') {
+            			firstP++;
+            			break;
+            		}
+        		}
+        	}
+        	else {
+        		firstP++;
+        	}
+        }
+        
+
+        int i = firstP;
+        while (i < document.length() - 6) {
+            String sequence = document.substring(i, i + 7);
+            boolean isLinkSequence = sequence.equals("\"/wiki/");
+            if (isLinkSequence) {
+                i += 6;
+                char currentCharacter = document.charAt(++i);
+                String link = sequence.substring(1) + currentCharacter;
+                currentCharacter = document.charAt(++i);
+                boolean hasSpecialCharacter = false;
+                while (currentCharacter != '"') {
+                    hasSpecialCharacter = currentCharacter == '#' || currentCharacter == ':';
+                    if (hasSpecialCharacter) break;
+                    link += currentCharacter;
+                    currentCharacter = document.charAt(++i);
+                }
+                if (!hasSpecialCharacter && !links.contains(link)) {
+                    links.add(link);
+                }
+            }
+            i++;
+        }
+
+        return links;
+    }
 
     public ArrayList<String> extractLinks(String document) {
         ArrayList<String> links = new ArrayList<>();
@@ -149,5 +196,16 @@ public class WikiCrawler {
 
     private void notFocusedCrawl() {
         // do unfocused crawl
+        int i = 0;
+        ArrayList<String> links = this.extractLinks(this.seed);
+
+        while( i < this.max){
+            for (String s  : links){
+
+                links.addAll(this.extractLinks(s));
+            }
+
+            i++;
+        }
     }
 }
