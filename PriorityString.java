@@ -1,3 +1,9 @@
+/**
+ * Representation of a page (as a URL) and its priority.
+ *
+ * @author Scott Huffman
+ * @author John Jago
+ */
 public class PriorityString {
 
     private String str;

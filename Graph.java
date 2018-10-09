@@ -3,6 +3,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * A graph.
+ *
+ * @author Scott Huffman
+ * @author John Jago
+ */
 public class Graph {
     private Set<Vertex> vertices;
     private Set<Edge> edges;

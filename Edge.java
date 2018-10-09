@@ -1,3 +1,9 @@
+/**
+ * Represents an edge in a graph.
+ *
+ * @author Scott Huffman
+ * @author John Jago
+ */
 public class Edge {
     private Vertex v1;
     private Vertex v2;
