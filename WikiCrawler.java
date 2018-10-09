@@ -15,6 +15,8 @@ public class WikiCrawler {
     private String[] topics;
     private String output;
 
+    private int crawlCounter = 0;
+
     public WikiCrawler(String seed, int max, String[] topics, String output) {
         this.seed = seed;
         this.max = max;
@@ -86,6 +88,10 @@ public class WikiCrawler {
 
     public String getDocument(String pageUrl) {
         URL url;
+        this.crawlCounter++;
+        if(this.crawlCounter%20==0){
+            //sleep
+        }
 
         try {
             url = new URL(BASE_URL + pageUrl);
