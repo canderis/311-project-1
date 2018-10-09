@@ -6,6 +6,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**
+ * A class for crawling wiki pages.
+ *
+ * @author Scott Huffman
+ * @author John Jago
+ */
 public class WikiCrawler {
 
     private static final String BASE_URL = "https://en.wikipedia.org";
@@ -121,8 +127,24 @@ public class WikiCrawler {
         }
     }
 
+    private int getCount(String substring, String page) {
+        String temp = page.replaceAll(substring, "");
+        return (page.length() - temp.length()) / substring.length();
+    }
+
+    private int computeRelevance(String page) {
+        int sum = 0;
+        for (String topic : this.topics) {
+            sum += this.getCount(topic, page);
+        }
+        return sum;
+    }
+
     private void focusedCrawl() {
-        // do focused crawl
+        // for every page a during bfs search
+            // compute relevance(t, a)
+            // add to pq, extract with extractMax
+        // write to output file
     }
 
     private void notFocusedCrawl() {
