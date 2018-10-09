@@ -60,7 +60,12 @@ public class WikiCrawler {
     }
 
     public void crawl(boolean focused) {
-
+        if(focused){
+            this.focusedCrawl();
+        }
+        else{
+            this.notFocusedCrawl();
+        }
     }
 
     public String getSeed() {
