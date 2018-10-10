@@ -1,10 +1,8 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A class for crawling wiki pages.
@@ -29,72 +27,71 @@ public class WikiCrawler {
         this.topics = topics;
         this.output = output;
     }
-    
 
-    
     public ArrayList<String> extractLinks2(String document) {
         ArrayList<String> links = new ArrayList<>();
 
-        int firstP = 0;
-        while(firstP < document.length() - 3) {
-        	if(document.charAt(firstP) == '<') {
-        		firstP++;
-        		if(document.charAt(firstP) == 'p') {
-        			firstP++;
-        			if(document.charAt(firstP) == '>') {
-            			firstP++;
-            			break;
-            		}
-        		}
-        	}
-        	else {
-        		firstP++;
-        	}
-        }
+<<<<<<< HEAD
+//        int firstP = 0;
+//        while(firstP < document.length() - 3) {
+//        	if(document.charAt(firstP) == '<') {
+//        		firstP++;
+//        		if(document.charAt(firstP) == 'p') {
+//        			firstP++;
+//        			if(document.charAt(firstP) == '>') {
+//            			firstP++;
+//            			break;
+//            		}
+//        		}
+//        	}
+//        	else {
+//        		firstP++;
+//        	}
+//        }
         
+        int firstP = document.indexOf("<p>");
+        
+=======
+        int firstP = 0;
+        while (firstP < document.length() - 3) {
+            if (document.charAt(firstP) == '<') {
+                firstP++;
+                if (document.charAt(firstP) == 'p') {
+                    firstP++;
+                    if (document.charAt(firstP) == '>') {
+                        firstP++;
+                        break;
+                    }
+                }
+            } else {
+                firstP++;
+            }
+        }
+
+>>>>>>> dc00a979de33c02b46aa86f211eb55d7f2fdf21e
 
         int i = firstP;
+       
         while (i < document.length() - 6) {
             String sequence = document.substring(i, i + 7);
             boolean isLinkSequence = sequence.equals("\"/wiki/");
-            
-            if(document.charAt(firstP) == '"') {
-        		i++;
-        		if(document.charAt(firstP) == '/') {
-        			i++;
-        			if(document.charAt(firstP) == 'w') {
-            			i++;
-            			if(document.charAt(firstP) == 'i') {
-                			i++;
-                			if(document.charAt(firstP) == 'k') {
-                    			i++;
-                    			if(document.charAt(firstP) == 'i') {
-                        			i++;
-                        			if(document.charAt(firstP) == '/') {
-                            			char currentCharacter = document.charAt(++i);
-                                        String link = sequence.substring(1) + currentCharacter;
-                                        currentCharacter = document.charAt(++i);
-                                        boolean hasSpecialCharacter = false;
-                                        while (currentCharacter != '"') {
-                                            hasSpecialCharacter = currentCharacter == '#' || currentCharacter == ':';
-                                            if (hasSpecialCharacter) break;
-                                            link += currentCharacter;
-                                            currentCharacter = document.charAt(++i);
-                                        }
-                                        if (!hasSpecialCharacter && !links.contains(link)) {
-                                            links.add(link);
-                                        }
-                            		}
-                        		}
-                    		}
-                		}
-            			
-            		}
-        		}
-        	}
-        	else {
-        		i++;
-        	}
+            if (isLinkSequence) {
+                i += 6;
+                char currentCharacter = document.charAt(++i);
+                String link = sequence.substring(1) + currentCharacter;
+                currentCharacter = document.charAt(++i);
+                boolean hasSpecialCharacter = false;
+                while (currentCharacter != '"') {
+                    hasSpecialCharacter = currentCharacter == '#' || currentCharacter == ':';
+                    if (hasSpecialCharacter) break;
+                    link += currentCharacter;
+                    currentCharacter = document.charAt(++i);
+                }
+                if (!hasSpecialCharacter && !links.contains(link)) {
+                    links.add(link);
+                }
+            }
+            i++;
         }
 
         return links;
@@ -211,10 +208,36 @@ public class WikiCrawler {
     }
 
     private void focusedCrawl() {
-        // for every page a during bfs search
-            // compute relevance(t, a)
-            // add to pq, extract with extractMax
-        // write to output file
+        PriorityQ pq = new PriorityQ();
+        List<String> discovered = new ArrayList<>();
+        List<Edge> edges = new ArrayList<>();
+        int pageCount = 0;
+
+        pq.add(this.seed, computeRelevance(getDocument(this.seed)));
+        discovered.add(this.seed);
+
+        while (!pq.isEmpty() && pageCount <= this.max) {
+            PriorityString v = pq.extractMax();
+            pageCount++;
+            List<String> links = extractLinks(getDocument(v.getStr()));
+            for (String link : links) {
+                if (!discovered.contains(link)) {
+                    pq.add(link, computeRelevance(getDocument(link)));
+                    discovered.add(link);
+                    edges.add(new Edge(v.getStr(), link));
+                }
+            }
+        }
+
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(this.output), "utf-8"))) {
+            writer.write(this.max + "\n");
+            for (Edge e : edges) {
+                writer.write( e.get(0).getLabel() + " " + e.get(1).getLabel() + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void notFocusedCrawl() {
@@ -222,8 +245,8 @@ public class WikiCrawler {
         int i = 0;
         ArrayList<String> links = this.extractLinks(this.seed);
 
-        while( i < this.max){
-            for (String s  : links){
+        while (i < this.max) {
+            for (String s : links) {
 
                 links.addAll(this.extractLinks(s));
             }

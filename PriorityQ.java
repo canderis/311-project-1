@@ -1,3 +1,9 @@
+/**
+ * A priority queue.
+ *
+ * @author Scott Huffman
+ * @author John Jago
+ */
 public class PriorityQ {
 
     private PriorityString[] data;
@@ -13,7 +19,7 @@ public class PriorityQ {
         data[size] = newString;
         size++;
 
-        if (size > data.length) {
+        if (size > data.length - 1) {
             PriorityString[] newData = new PriorityString[data.length * 2];
             System.arraycopy(data, 0, newData, 0, data.length);
             data = newData;
