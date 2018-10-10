@@ -2,6 +2,8 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -216,19 +218,50 @@ public class WikiCrawler {
             e.printStackTrace();
         }
     }
+    
+    private boolean pageContainsKeywords(String document) {
+    	
+    	for (String topic : this.topics) {
+            if (document.indexOf(topic) == -1 ) {
+            	return false;
+            }
+        }
+
+    	return true;
+    }
 
     private void notFocusedCrawl() {
         // do unfocused crawl
         int i = 0;
-        ArrayList<String> links = this.extractLinks(this.seed);
+        HashMap<String, Boolean> discovered = new HashMap<String, Boolean>();
+        String document = this.getDocument(this.seed);
+        if(!this.pageContainsKeywords(document) ) {
+        	return;
+        }
+        
+        //Todo: Fix to store parent page
+        //Todo: make output graph
+        
+        ArrayList<String> links = this.extractLinks(document);
+        
+        ArrayList<String> output = new ArrayList<String>();
 
-        while (i < this.max) {
-            for (String s : links) {
-
-                links.addAll(this.extractLinks(s));
+        for (String s : links) {
+        	Boolean d = discovered.get(s);
+        	if(d == null) {
+        		document = this.getDocument(s);
+                if(this.pageContainsKeywords(document) ) {
+                	i++;
+                    links.addAll(this.extractLinks(document));
+                }
+        	}
+        	else if(d) {
+        		//discovered but valid
+        	}
+            
+            if(i >= this.max) {
+            	break;
             }
-
-            i++;
         }
     }
 }
