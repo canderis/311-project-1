@@ -1,3 +1,9 @@
+/**
+ * A vertex for a graph.
+ *
+ * @author Scott Huffman
+ * @author John Jago
+ */
 public class Vertex {
     private String label;
 

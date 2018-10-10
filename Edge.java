@@ -1,15 +1,28 @@
+/**
+ * Represents an edge in a graph.
+ *
+ * @author Scott Huffman
+ * @author John Jago
+ */
 public class Edge {
+    private Vertex v0;
     private Vertex v1;
-    private Vertex v2;
 
-    public Edge(Vertex v1, Vertex v2) {
+    public Edge(Vertex v0, Vertex v1) {
+        this.v0 = v0;
         this.v1 = v1;
-        this.v2 = v2;
     }
 
-    public Vertex getVertex(int i) {
-        if (i == 1) return v1;
-        return v2;
+    public Edge(String v0, String v1) {
+        this.v0 = new Vertex(v0);
+        this.v1 = new Vertex(v1);
+    }
+
+    public Vertex get(int i) {
+        if (i == 0) {
+            return v0;
+        }
+        return v1;
     }
 
     @Override
@@ -24,11 +37,11 @@ public class Edge {
             return false;
 
         Edge other = (Edge) o;
-        return this.v1.equals(other.v1) && this.v2.equals(other.v2);
+        return this.v0.equals(other.v0) && this.v1.equals(other.v1);
     }
 
     @Override
     public int hashCode() {
-        return v1.hashCode() + v2.hashCode();
+        return v0.hashCode() + v1.hashCode();
     }
 }
