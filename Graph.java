@@ -34,10 +34,10 @@ public class Graph {
 
     public void addEdge(Edge e) {
         edges.add(e);
-        adjacencyList.putIfAbsent(e.getVertex(1), new HashSet<>());
-        adjacencyList.putIfAbsent(e.getVertex(2), new HashSet<>());
-        adjacencyList.get(e.getVertex(1)).add(e.getVertex(2));
-        adjacencyList.get(e.getVertex(2)).add(e.getVertex(1));
+        adjacencyList.putIfAbsent(e.get(1), new HashSet<>());
+        adjacencyList.putIfAbsent(e.get(2), new HashSet<>());
+        adjacencyList.get(e.get(1)).add(e.get(2));
+        adjacencyList.get(e.get(2)).add(e.get(1));
     }
 
     public Set<Vertex> getVertices() {
