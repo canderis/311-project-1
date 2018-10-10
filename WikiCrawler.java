@@ -35,66 +35,48 @@ public class WikiCrawler {
     public ArrayList<String> extractLinks2(String document) {
         ArrayList<String> links = new ArrayList<>();
 
-        int firstP = 0;
-        while(firstP < document.length() - 3) {
-        	if(document.charAt(firstP) == '<') {
-        		firstP++;
-        		if(document.charAt(firstP) == 'p') {
-        			firstP++;
-        			if(document.charAt(firstP) == '>') {
-            			firstP++;
-            			break;
-            		}
-        		}
-        	}
-        	else {
-        		firstP++;
-        	}
-        }
+//        int firstP = 0;
+//        while(firstP < document.length() - 3) {
+//        	if(document.charAt(firstP) == '<') {
+//        		firstP++;
+//        		if(document.charAt(firstP) == 'p') {
+//        			firstP++;
+//        			if(document.charAt(firstP) == '>') {
+//            			firstP++;
+//            			break;
+//            		}
+//        		}
+//        	}
+//        	else {
+//        		firstP++;
+//        	}
+//        }
+        
+        int firstP = document.indexOf("<p>");
         
 
         int i = firstP;
+       
         while (i < document.length() - 6) {
             String sequence = document.substring(i, i + 7);
             boolean isLinkSequence = sequence.equals("\"/wiki/");
-            
-            if(document.charAt(firstP) == '"') {
-        		i++;
-        		if(document.charAt(firstP) == '/') {
-        			i++;
-        			if(document.charAt(firstP) == 'w') {
-            			i++;
-            			if(document.charAt(firstP) == 'i') {
-                			i++;
-                			if(document.charAt(firstP) == 'k') {
-                    			i++;
-                    			if(document.charAt(firstP) == 'i') {
-                        			i++;
-                        			if(document.charAt(firstP) == '/') {
-                            			char currentCharacter = document.charAt(++i);
-                                        String link = sequence.substring(1) + currentCharacter;
-                                        currentCharacter = document.charAt(++i);
-                                        boolean hasSpecialCharacter = false;
-                                        while (currentCharacter != '"') {
-                                            hasSpecialCharacter = currentCharacter == '#' || currentCharacter == ':';
-                                            if (hasSpecialCharacter) break;
-                                            link += currentCharacter;
-                                            currentCharacter = document.charAt(++i);
-                                        }
-                                        if (!hasSpecialCharacter && !links.contains(link)) {
-                                            links.add(link);
-                                        }
-                            		}
-                        		}
-                    		}
-                		}
-            			
-            		}
-        		}
-        	}
-        	else {
-        		i++;
-        	}
+            if (isLinkSequence) {
+                i += 6;
+                char currentCharacter = document.charAt(++i);
+                String link = sequence.substring(1) + currentCharacter;
+                currentCharacter = document.charAt(++i);
+                boolean hasSpecialCharacter = false;
+                while (currentCharacter != '"') {
+                    hasSpecialCharacter = currentCharacter == '#' || currentCharacter == ':';
+                    if (hasSpecialCharacter) break;
+                    link += currentCharacter;
+                    currentCharacter = document.charAt(++i);
+                }
+                if (!hasSpecialCharacter && !links.contains(link)) {
+                    links.add(link);
+                }
+            }
+            i++;
         }
 
         return links;
