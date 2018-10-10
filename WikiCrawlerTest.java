@@ -10,9 +10,9 @@ public class WikiCrawlerTest {
     @Test
     public void extractLinksTest1() {
         String seed = "/wiki/Stubb_Place";
-        int max = 10;
-        String[] topics = {"ball", "gravity"};
-        String output = "web_graph.txt";
+        int max = 5;
+        String[] topics = {"england", "town"};
+        String output = "web_graph_stubb_place.txt";
         WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
 
         List<String> actual = wc.extractLinks2(wc.getDocument(wc.getSeed()));
@@ -50,11 +50,11 @@ public class WikiCrawlerTest {
     }
 
     @Test
-    public void focusedCrawlTest() {
+    public void focusedCrawlTest1() {
         String seed = "/wiki/Chomphu,_Lampang";
-        int max = 50;
+        int max = 5;
         String[] topics = {"thailand", "food"};
-        String output = "web_graph.txt";
+        String output = "web_graph_chomphu.txt";
         WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
 
         wc.crawl(true);
@@ -63,11 +63,22 @@ public class WikiCrawlerTest {
     @Test
     public void focusedCrawlTest2() {
         String seed = "/wiki/Complexity_theory";
-        int max = 1;
+        int max = 3;
         String[] topics = {};
         String output = "web_graph_wikiCC.txt";
         WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
 
         wc.crawl(true);
+    }
+
+    @Test
+    public void focusedCrawlTest3() {
+        String seed = "/wiki/A.html"; // must change base URL
+        int max = 6;
+        String[] topics = {};
+        String output = "web_graph_pavan_sample.txt";
+        WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
+
+//        wc.crawl(true);
     }
 }

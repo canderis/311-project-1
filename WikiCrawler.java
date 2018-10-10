@@ -135,10 +135,6 @@ public class WikiCrawler {
         return topics;
     }
 
-    public String getOutput() {
-        return output;
-    }
-
     public String getDocument(String pageUrl) {
         URL url;
         this.crawlCounter++;
@@ -192,7 +188,7 @@ public class WikiCrawler {
         PriorityQ pq = new PriorityQ();
         List<String> discovered = new ArrayList<>();
         List<Edge> edges = new ArrayList<>();
-        int pageCount = 0;
+        int pageCount = 1;
 
         pq.add(this.seed, computeRelevance(getDocument(this.seed)));
         discovered.add(this.seed);

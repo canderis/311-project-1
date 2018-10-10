@@ -1,0 +1,8 @@
+6
+/wiki/A.html /wiki/B.html
+/wiki/A.html /wiki/C.html
+/wiki/A.html /wiki/D.html
+/wiki/B.html /wiki/I.html
+/wiki/B.html /wiki/J.html
+/wiki/D.html /wiki/G.html
+/wiki/D.html /wiki/H.html
