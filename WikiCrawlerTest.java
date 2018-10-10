@@ -13,7 +13,6 @@ public class WikiCrawlerTest {
         int max = 10;
         String[] topics = {"ball", "gravity"};
         String output = "web_graph.txt";
-
         WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
 
         List<String> actual = wc.extractLinks2(wc.getDocument(wc.getSeed()));
@@ -34,7 +33,6 @@ public class WikiCrawlerTest {
         int max = 10;
         String[] topics = {"place"};
         String output = "web_graph.txt";
-
         WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
 
         List<String> actual = wc.extractLinks2(wc.getDocument(wc.getSeed()));
@@ -49,5 +47,27 @@ public class WikiCrawlerTest {
         );
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void focusedCrawlTest() {
+        String seed = "/wiki/Chomphu,_Lampang";
+        int max = 50;
+        String[] topics = {"thailand", "food"};
+        String output = "web_graph.txt";
+        WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
+
+        wc.crawl(true);
+    }
+
+    @Test
+    public void focusedCrawlTest2() {
+        String seed = "/wiki/Complexity_theory";
+        int max = 1;
+        String[] topics = {};
+        String output = "web_graph_wikiCC.txt";
+        WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
+
+        wc.crawl(true);
     }
 }
