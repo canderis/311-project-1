@@ -52,6 +52,7 @@ public class WikiCrawler {
 
         int i = firstP;
 
+
         while (i < document.length() - 6) {
             String sequence = document.substring(i, i + 7);
             boolean isLinkSequence = sequence.equals("\"/wiki/");
