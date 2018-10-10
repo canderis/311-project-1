@@ -52,23 +52,44 @@ public class WikiCrawler {
         while (i < document.length() - 6) {
             String sequence = document.substring(i, i + 7);
             boolean isLinkSequence = sequence.equals("\"/wiki/");
-            if (isLinkSequence) {
-                i += 6;
-                char currentCharacter = document.charAt(++i);
-                String link = sequence.substring(1) + currentCharacter;
-                currentCharacter = document.charAt(++i);
-                boolean hasSpecialCharacter = false;
-                while (currentCharacter != '"') {
-                    hasSpecialCharacter = currentCharacter == '#' || currentCharacter == ':';
-                    if (hasSpecialCharacter) break;
-                    link += currentCharacter;
-                    currentCharacter = document.charAt(++i);
-                }
-                if (!hasSpecialCharacter && !links.contains(link)) {
-                    links.add(link);
-                }
-            }
-            i++;
+            
+            if(document.charAt(firstP) == '"') {
+        		i++;
+        		if(document.charAt(firstP) == '/') {
+        			i++;
+        			if(document.charAt(firstP) == 'w') {
+            			i++;
+            			if(document.charAt(firstP) == 'i') {
+                			i++;
+                			if(document.charAt(firstP) == 'k') {
+                    			i++;
+                    			if(document.charAt(firstP) == 'i') {
+                        			i++;
+                        			if(document.charAt(firstP) == '/') {
+                            			char currentCharacter = document.charAt(++i);
+                                        String link = sequence.substring(1) + currentCharacter;
+                                        currentCharacter = document.charAt(++i);
+                                        boolean hasSpecialCharacter = false;
+                                        while (currentCharacter != '"') {
+                                            hasSpecialCharacter = currentCharacter == '#' || currentCharacter == ':';
+                                            if (hasSpecialCharacter) break;
+                                            link += currentCharacter;
+                                            currentCharacter = document.charAt(++i);
+                                        }
+                                        if (!hasSpecialCharacter && !links.contains(link)) {
+                                            links.add(link);
+                                        }
+                            		}
+                        		}
+                    		}
+                		}
+            			
+            		}
+        		}
+        	}
+        	else {
+        		i++;
+        	}
         }
 
         return links;
