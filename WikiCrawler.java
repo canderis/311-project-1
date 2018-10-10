@@ -31,7 +31,6 @@ public class WikiCrawler {
     public ArrayList<String> extractLinks2(String document) {
         ArrayList<String> links = new ArrayList<>();
 
-<<<<<<< HEAD
 //        int firstP = 0;
 //        while(firstP < document.length() - 3) {
 //        	if(document.charAt(firstP) == '<') {
@@ -48,30 +47,11 @@ public class WikiCrawler {
 //        		firstP++;
 //        	}
 //        }
-        
-        int firstP = document.indexOf("<p>");
-        
-=======
-        int firstP = 0;
-        while (firstP < document.length() - 3) {
-            if (document.charAt(firstP) == '<') {
-                firstP++;
-                if (document.charAt(firstP) == 'p') {
-                    firstP++;
-                    if (document.charAt(firstP) == '>') {
-                        firstP++;
-                        break;
-                    }
-                }
-            } else {
-                firstP++;
-            }
-        }
 
->>>>>>> dc00a979de33c02b46aa86f211eb55d7f2fdf21e
+        int firstP = document.indexOf("<p>");
 
         int i = firstP;
-       
+
         while (i < document.length() - 6) {
             String sequence = document.substring(i, i + 7);
             boolean isLinkSequence = sequence.equals("\"/wiki/");
