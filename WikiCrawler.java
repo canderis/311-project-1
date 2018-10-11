@@ -187,8 +187,6 @@ public class WikiCrawler {
         while(currentKey < keys.size()){
         	String key = keys.get(currentKey);
         	i++;
-        	System.out.println("iteration" + i);
-//        	System.out.println("max" + this.max);
 
         	for (String link : links.get(key)) {
 
@@ -197,15 +195,12 @@ public class WikiCrawler {
         		}
 
         		if(links.containsKey(link)) {
-        			//output parent -> this link
         			output.add(key + ' ' + link);
         			continue;
         		}
 
-
         		document = this.getDocument(link);
         		if(this.pageContainsKeywords(document) ) {
-//        			System.out.println("here " + link);
         			links.put(link, this.extractLinks(document));
         			output.add(key + ' ' + link);
         			keys.add(link);
@@ -221,8 +216,14 @@ public class WikiCrawler {
     		}
         }
 
-        for(String o : output) {
-        	System.out.println(o);
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(this.output), "utf-8"))) {
+            writer.write(this.max + "\n");
+            for (String s : output) {
+                writer.write( s + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 
