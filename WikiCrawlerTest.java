@@ -64,7 +64,7 @@ public class WikiCrawlerTest {
     public void focusedCrawlTest2() {
         String seed = "/wiki/Complexity_theory";
         int max = 3;
-        String[] topics = {};
+        String[] topics = {"information", "theory", "science", "data"};
         String output = "web_graph_wikiCC.txt";
         WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
 

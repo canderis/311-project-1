@@ -1,10 +1,7 @@
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * A class for crawling wiki pages.
@@ -192,7 +189,11 @@ public class WikiCrawler {
         List<Edge> edges = new ArrayList<>();
         int pageCount = 1;
 
-        pq.add(this.seed, computeRelevance(getDocument(this.seed)));
+        String seed = getDocument(this.seed);
+        if (!pageContainsKeywords(seed)) {
+            return;
+        }
+        pq.add(this.seed, computeRelevance(seed));
         discovered.add(this.seed);
 
         while (!pq.isEmpty() && pageCount <= this.max) {
@@ -200,8 +201,9 @@ public class WikiCrawler {
             pageCount++;
             List<String> links = extractLinks(getDocument(v.getStr()));
             for (String link : links) {
-                if (!discovered.contains(link)) {
-                    pq.add(link, computeRelevance(getDocument(link)));
+                String page = getDocument(link);
+                if (!discovered.contains(link) && pageContainsKeywords(page)) {
+                    pq.add(link, computeRelevance(page));
                     discovered.add(link);
                     edges.add(new Edge(v.getStr(), link));
                 }
