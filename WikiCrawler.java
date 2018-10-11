@@ -1,13 +1,7 @@
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A class for crawling wiki pages.
@@ -195,7 +189,11 @@ public class WikiCrawler {
         List<Edge> edges = new ArrayList<>();
         int pageCount = 1;
 
-        pq.add(this.seed, computeRelevance(getDocument(this.seed)));
+        String seed = getDocument(this.seed);
+        if (!pageContainsKeywords(seed)) {
+            return;
+        }
+        pq.add(this.seed, computeRelevance(seed));
         discovered.add(this.seed);
 
         while (!pq.isEmpty() && pageCount <= this.max) {
@@ -203,8 +201,9 @@ public class WikiCrawler {
             pageCount++;
             List<String> links = extractLinks(getDocument(v.getStr()));
             for (String link : links) {
-                if (!discovered.contains(link)) {
-                    pq.add(link, computeRelevance(getDocument(link)));
+                String page = getDocument(link);
+                if (!discovered.contains(link) && pageContainsKeywords(page)) {
+                    pq.add(link, computeRelevance(page));
                     discovered.add(link);
                     edges.add(new Edge(v.getStr(), link));
                 }
@@ -221,9 +220,9 @@ public class WikiCrawler {
             e.printStackTrace();
         }
     }
-    
+
     private boolean pageContainsKeywords(String document) {
-    	
+
     	for (String topic : this.topics) {
             if (document.indexOf(topic) == -1 ) {
             	return false;
@@ -244,32 +243,32 @@ public class WikiCrawler {
 
         ArrayList<String> output = new ArrayList<String>();
         HashSet<String> irrelevantLinks = new HashSet<String>();
-        
+
         LinkedHashMap<String, ArrayList<String>> links = new LinkedHashMap<String, ArrayList<String>>();
         links.put(this.seed, this.extractLinks2(document));
-        
+
         int currentKey = 0;
         ArrayList<String> keys = new ArrayList<String>();
         keys.add(this.seed);
-        
+
         while(currentKey < keys.size()){
         	String key = keys.get(currentKey);
         	i++;
         	System.out.println("iteration" + i);
 //        	System.out.println("max" + this.max);
-    	  
+
         	for (String link : links.get(key)) {
-        		
+
         		if(irrelevantLinks.contains(link)) {
         			continue;
         		}
-        		
+
         		if(links.containsKey(link)) {
         			//output parent -> this link
         			output.add(key + ' ' + link);
         			continue;
         		}
-        		
+
 
         		document = this.getDocument(link);
         		if(this.pageContainsKeywords(document) ) {
@@ -283,18 +282,18 @@ public class WikiCrawler {
         		}
         	}
         	currentKey++;
-        	
+
         	if(i >= this.max) {
     			break;
     		}
         }
-        
+
         for(String o : output) {
         	System.out.println(o);
         }
 
-        
 
-        
+
+
     }
 }

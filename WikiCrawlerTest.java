@@ -81,12 +81,23 @@ public class WikiCrawlerTest {
 //
 ////        wc.crawl(true);
 //    }
-    
+
     @Test
     public void unfocusedCrawlTest1() {
         String seed = "/wiki/Complexity_theory"; // must change base URL
         int max = 3;
-        String[] topics = {"the", "application", "complexity"};
+        String[] topics = {"information", "theory", "science", "data"};
+        String output = "web_graph_wikiCC.txt";
+        WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
+
+        wc.crawl(true);
+    }
+
+    @Test
+    public void focusedCrawlTest3() {
+        String seed = "/wiki/A.html"; // must change base URL
+        int max = 6;
+        String[] topics = {};
         String output = "web_graph_pavan_sample.txt";
         WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
 
