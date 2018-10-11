@@ -288,8 +288,14 @@ public class WikiCrawler {
     		}
         }
 
-        for(String o : output) {
-        	System.out.println(o);
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(this.output), "utf-8"))) {
+            writer.write(this.max + "\n");
+            for (String s : output) {
+                writer.write( s + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 
