@@ -52,8 +52,8 @@ public class WikiCrawlerTest {
     @Test
     public void focusedCrawlTest1() {
         String seed = "/wiki/Chomphu,_Lampang";
-        int max = 5;
-        String[] topics = {"thailand", "food"};
+        int max = 1;
+        String[] topics = {};
         String output = "web_graph_chomphu.txt";
         WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
 
@@ -63,8 +63,8 @@ public class WikiCrawlerTest {
     @Test
     public void focusedCrawlTest2() {
         String seed = "/wiki/Complexity_theory";
-        int max = 3;
-        String[] topics = {};
+        int max = 1;
+        String[] topics = {"banana"};
         String output = "web_graph_wikiCC.txt";
         WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
 
@@ -75,10 +75,10 @@ public class WikiCrawlerTest {
     public void unfocusedCrawlTest1() {
         String seed = "/wiki/Complexity_theory";
         int max = 3;
-        String[] topics = {"information", "theory", "science", "data"};
+        String[] topics = {};
         String output = "web_graph_wikiCC.txt";
         WikiCrawler wc = new WikiCrawler(seed, max, topics, output);
 
-        wc.crawl(true);
+        wc.crawl(false);
     }
 }

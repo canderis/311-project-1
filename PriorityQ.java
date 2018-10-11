@@ -53,8 +53,8 @@ public class PriorityQ {
         percolateDown(data, size, i);
     }
 
-    public void decrementPriority(int i, int k) {
-        data[i].setPriority(data[i].getPriority() - k);
+    public void decrementPriority(int i, int o) {
+        data[i].setPriority(data[i].getPriority() - o);
         percolateDown(data, size, i);
     }
 

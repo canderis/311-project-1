@@ -1,7 +1,10 @@
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * A class for crawling wiki pages.
@@ -166,9 +169,7 @@ public class WikiCrawler {
     }
 
     private void notFocusedCrawl() {
-        // do unfocused crawl
         int i = 0;
-        //HashMap<String, Boolean> discovered = new HashMap<String, Boolean>();
         String document = this.getDocument(this.seed);
         if(!this.pageContainsKeywords(document) ) {
         	return;
@@ -189,6 +190,9 @@ public class WikiCrawler {
         	i++;
 
         	for (String link : links.get(key)) {
+        	    if(key.equals(link)){
+        	        continue;
+                }
 
         		if(irrelevantLinks.contains(link)) {
         			continue;
@@ -225,9 +229,5 @@ public class WikiCrawler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
-
     }
 }
