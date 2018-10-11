@@ -220,9 +220,9 @@ public class WikiCrawler {
             e.printStackTrace();
         }
     }
-    
+
     private boolean pageContainsKeywords(String document) {
-    	
+
     	for (String topic : this.topics) {
             if (document.indexOf(topic) == -1 ) {
             	return false;
@@ -235,35 +235,65 @@ public class WikiCrawler {
     private void notFocusedCrawl() {
         // do unfocused crawl
         int i = 0;
-        HashMap<String, Boolean> discovered = new HashMap<String, Boolean>();
+        //HashMap<String, Boolean> discovered = new HashMap<String, Boolean>();
         String document = this.getDocument(this.seed);
         if(!this.pageContainsKeywords(document) ) {
         	return;
         }
-        
-        //Todo: Fix to store parent page
-        //Todo: make output graph
-        
-        ArrayList<String> links = this.extractLinks(document);
-        
-        ArrayList<String> output = new ArrayList<String>();
 
-        for (String s : links) {
-        	Boolean d = discovered.get(s);
-        	if(d == null) {
-        		document = this.getDocument(s);
-                if(this.pageContainsKeywords(document) ) {
-                	i++;
-                    links.addAll(this.extractLinks(document));
-                }
+        ArrayList<String> output = new ArrayList<String>();
+        HashSet<String> irrelevantLinks = new HashSet<String>();
+
+        LinkedHashMap<String, ArrayList<String>> links = new LinkedHashMap<String, ArrayList<String>>();
+        links.put(this.seed, this.extractLinks2(document));
+
+        int currentKey = 0;
+        ArrayList<String> keys = new ArrayList<String>();
+        keys.add(this.seed);
+
+        while(currentKey < keys.size()){
+        	String key = keys.get(currentKey);
+        	i++;
+        	System.out.println("iteration" + i);
+//        	System.out.println("max" + this.max);
+
+        	for (String link : links.get(key)) {
+
+        		if(irrelevantLinks.contains(link)) {
+        			continue;
+        		}
+
+        		if(links.containsKey(link)) {
+        			//output parent -> this link
+        			output.add(key + ' ' + link);
+        			continue;
+        		}
+
+
+        		document = this.getDocument(link);
+        		if(this.pageContainsKeywords(document) ) {
+//        			System.out.println("here " + link);
+        			links.put(link, this.extractLinks2(document));
+        			output.add(key + ' ' + link);
+        			keys.add(link);
+        		}
+        		else {
+        			irrelevantLinks.add(link);
+        		}
         	}
-        	else if(d) {
-        		//discovered but valid
-        	}
-            
-            if(i >= this.max) {
-            	break;
-            }
+        	currentKey++;
+
+        	if(i >= this.max) {
+    			break;
+    		}
         }
+
+        for(String o : output) {
+        	System.out.println(o);
+        }
+
+
+
+
     }
 }
