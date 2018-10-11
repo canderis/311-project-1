@@ -30,28 +30,18 @@ public class WikiCrawler {
     public ArrayList<String> extractLinks(String document) {
         ArrayList<String> links = new ArrayList<>();
         int firstP = document.indexOf("<p>");
-        int i = firstP;
+        int i = document.indexOf("\"/wiki/", firstP);
 
-        while (i < document.length() - 6) {
-            String sequence = document.substring(i, i + 7);
-            boolean isLinkSequence = sequence.equals("\"/wiki/");
-            if (isLinkSequence) {
-                i += 6;
-                char currentCharacter = document.charAt(++i);
-                String link = sequence.substring(1) + currentCharacter;
-                currentCharacter = document.charAt(++i);
-                boolean hasSpecialCharacter = false;
-                while (currentCharacter != '"') {
-                    hasSpecialCharacter = currentCharacter == '#' || currentCharacter == ':';
-                    if (hasSpecialCharacter) break;
-                    link += currentCharacter;
-                    currentCharacter = document.charAt(++i);
-                }
-                if (!hasSpecialCharacter && !links.contains(link)) {
-                    links.add(link);
-                }
+        while (i != -1) {
+            String s = document.substring(i + 1, document.indexOf('"', i + 1));
+            i += s.length();
+            i = document.indexOf("\"/wiki", i);
+            if (s.contains("#") || s.contains(":")) {
+                continue;
             }
-            i++;
+            if (!links.contains(s)) {
+                links.add(s);
+            }
         }
 
         return links;
