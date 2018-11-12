@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class WikiCrawler {
 
-    private static final String BASE_URL = "https://en.wikipedia.org";
+    private static final String BASE_URL = "http://web.cs.iastate.edu/~pavan";
 
     private String seed;
     private int max;
@@ -133,15 +133,15 @@ public class WikiCrawler {
         discovered.add(this.seed);
 
         while (!pq.isEmpty() && pageCount <= this.max) {
-            PriorityString v = pq.extractMax();
+            String v = pq.extractMax();
             pageCount++;
-            List<String> links = extractLinks(getDocument(v.getStr()));
+            List<String> links = extractLinks(getDocument(v));
             for (String link : links) {
                 String page = getDocument(link);
                 if (!discovered.contains(link) && pageContainsKeywords(page)) {
                     pq.add(link, computeRelevance(page));
                     discovered.add(link);
-                    edges.add(new Edge(v.getStr(), link));
+                    edges.add(new Edge(v, link));
                 }
             }
         }

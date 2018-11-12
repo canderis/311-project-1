@@ -34,12 +34,12 @@ public class PriorityQ {
         data[i] = newString;
     }
 
-    public PriorityString returnMax() {
-        return data[0];
+    public String returnMax() {
+        return data[0].getStr();
     }
 
-    public PriorityString extractMax() {
-        PriorityString max = returnMax();
+    public String extractMax() {
+        String max = returnMax();
         data[0] = data[size - 1];
         size--;
         percolateDown(data, size, 0);
